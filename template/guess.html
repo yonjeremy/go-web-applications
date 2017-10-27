@@ -11,7 +11,14 @@
   </head>
   <body>
     <h1>Guessing game</h1>
-    <h2>Guess a number between 1 and 20</h2>
+    <h2>{{.S}}.</h2>
+
+    <form action="/guess" >
+        Guess:<br>
+        <input type="text" name="guess">
+        <br>
+        <input type="submit" value="Guess">
+    </form> 
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
