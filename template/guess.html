@@ -13,13 +13,15 @@
     <h1>Guessing game</h1>
     <h2>{{.S}}.</h2>
 
-    <form action="/guess" >
+    <form action="/guess" method="GET">
         Guess:<br>
-        <input type="text" name="guess">
+        <input type="text" id="guess" name="guess">
         <br>
         <input type="submit" value="Guess">
     </form> 
 
+    <h3>{{if .GuessedNumber}}You guessed {{.GuessedNumber}}{{end}}</h3>
+    <h3>{{if .Status}}{{.Status}}{{end}}</h3>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
