@@ -18,55 +18,66 @@ type Message struct {
 
 func templateHandler(w http.ResponseWriter, r *http.Request){
     
-    
+    // declare game status message variable
+    var status string
+
+    // h2 header for game
     h2header := "Guess a number between 1 and 20"     
 
+    // request cookie from the page
     cookies, err := r.Cookie("target")
-     if err == http.ErrNoCookie {
-        
+    
+    // if no cookie found, create a new cookie
+    if err == http.ErrNoCookie {   
         cookies = &http.Cookie{
             Name: "target",
-            Value: strconv.Itoa((rand.Intn(20)+1)),
-            Expires: time.Now().Add(1 * time.Hour),
+            Value: strconv.Itoa((rand.Intn(20)+1)), // generates random number between 1-20
+            Expires: time.Now().Add(1 * time.Hour), // creates cookie that expires in one hour
         }
-    http.SetCookie(w, cookies)
+        // set the cookie
+        http.SetCookie(w, cookies)
     }
 
     gameFinished := false 
 
-    //r.ParseForm()
-    currentNumber,_ := strconv.Atoi(r.FormValue("guess"))
-    //Number{GuessedNumber:r.Form["guess"][0]}
+    // get the guessed Number from the form
+    guessedNumber,_ := strconv.Atoi(r.FormValue("guess"))
 
-    var status string
+    // get the random number from the cookie
     randNum,_ := strconv.Atoi(cookies.Value)
-    if currentNumber == randNum{
+
+    // check if the users guessed number and the random number matches
+    if guessedNumber == randNum{
         status = "You have guessed the correct number. Click New Game for the next random number"
+        //generate a new cookie with new random number
         cookies = &http.Cookie{
             Name: "target",
             Value: strconv.Itoa((rand.Intn(20)+1)),
             Expires: time.Now().Add(1 * time.Hour),
         }
     http.SetCookie(w, cookies)
+    // set the game to finish
     gameFinished = true
-    } else if (currentNumber < randNum) && (currentNumber > 0){
+    } else if (guessedNumber < randNum) && (guessedNumber > 0){
         status = "Number is too low"
-    } else if currentNumber > randNum{
+    } else if guessedNumber > randNum{
         status = "Number is too high"
     }
 
+    // setup the template to be executed
+    msg  := &Message{S:h2header, GuessedNumber:guessedNumber, Status:status, GameFinished: gameFinished}
 
-    msg  := &Message{S:h2header, GuessedNumber:currentNumber, Status:status, GameFinished: gameFinished}
-
+    // tells the page the location of the template files and executes them
     t, _ := template.ParseFiles("template/guess.tmpl")
-    //t.Execute(w,Message{})  
     t.Execute(w,msg)
 
 }
 
 
 func main() {
+    // generate seed for random number
     rand.Seed(time.Now().UTC().UnixNano())
+
     http.Handle("/", http.FileServer(http.Dir("./static")))
     http.HandleFunc("/guess", templateHandler)
     http.ListenAndServe(":8080", nil)
