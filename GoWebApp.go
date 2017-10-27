@@ -6,8 +6,6 @@ import (
     "strconv"
     "time"
     "math/rand"
-    
-
 )
 
 type Message struct {  
@@ -15,21 +13,19 @@ type Message struct {
     GuessedNumber int
     Status string
     GameFinished bool
-    IsNewGame bool
 }
 
 
 func templateHandler(w http.ResponseWriter, r *http.Request){
     
-    var isNewGame bool
+    
     h2header := "Guess a number between 1 and 20"     
 
-    cookies, err := r.Cookie("thing")
-
+    cookies, err := r.Cookie("target")
      if err == http.ErrNoCookie {
         
         cookies = &http.Cookie{
-            Name: "thing",
+            Name: "target",
             Value: strconv.Itoa((rand.Intn(20)+1)),
             Expires: time.Now().Add(1 * time.Hour),
         }
@@ -47,7 +43,7 @@ func templateHandler(w http.ResponseWriter, r *http.Request){
     if currentNumber == randNum{
         status = "You have guessed the correct number. Click New Game for the next random number"
         cookies = &http.Cookie{
-            Name: "thing",
+            Name: "target",
             Value: strconv.Itoa((rand.Intn(20)+1)),
             Expires: time.Now().Add(1 * time.Hour),
         }
@@ -60,9 +56,9 @@ func templateHandler(w http.ResponseWriter, r *http.Request){
     }
 
 
-    msg  := &Message{S:h2header, GuessedNumber:currentNumber, Status:status, GameFinished: gameFinished, IsNewGame:isNewGame}
+    msg  := &Message{S:h2header, GuessedNumber:currentNumber, Status:status, GameFinished: gameFinished}
 
-    t, _ := template.ParseFiles("template/guess.html")
+    t, _ := template.ParseFiles("template/guess.tmpl")
     //t.Execute(w,Message{})  
     t.Execute(w,msg)
 
