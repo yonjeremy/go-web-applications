@@ -1,16 +1,16 @@
-#Go Web Applications
+Go Web Applications
 
-##Author
+Author:
 
 This repository is managed by JEREMY YON (G00330435) of Galway Mayo Institute of Technology.
 
-##Prerequisites
+Prerequisites:
 
 Software needed to run the code
 
 - GO1 9.1 (Download here: https://storage.googleapis.com/golang/go1.9.1.windows-amd64.msi)
 
-##Cloning this repository
+Cloning this repository:
 
 Step by step methods to clone this repository to your local machine.
 
@@ -18,7 +18,7 @@ Step 1: In cmder, change directory (cd) to the folder that you want to clone you
 
 Step 2: Type in: "git clone https://github.com/yonjeremy/go-web-applications.git"
 
-##Running the code
+Running the code:
 
 Step by step methods to run the code.
 
